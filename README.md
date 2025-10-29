@@ -49,6 +49,12 @@ SoulSync never claims to be a therapist.
 It reflects, listens, and supports gently.  
 If crisis language is detected, a clear message encourages the user to reach out to real human help.
 
+### 🔒 Privacy by Design
+SoulSync is intentionally **local-first**.  
+All chats and emotional summaries are stored in `data/` on your device only.  
+No data is uploaded, shared, or used to train external models.  
+This ensures true emotional safety — your reflections stay yours.
+
 ---
 
 ## 🧭 4-Week Builder Roadmap
