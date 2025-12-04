@@ -1,7 +1,41 @@
-.venv/
+# Environment & Secrets
+.env
+*.env
+.streamlit/secrets.toml
+
+# Python
 __pycache__/
 *.pyc
-.env
-data/*.jsonl
-data/*.db
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+dist/
+build/
+
+# User Data (IMPORTANT - keep private!)
+data/
+*.jsonl
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.backup

@@ -1,0 +1,94 @@
+/* ═══════════════════════════════════════════════════════════
+   Logged In User Styles - FIXED
+   Applied when user is authenticated
+   ═══════════════════════════════════════════════════════════ */
+
+/* FORCE SIDEBAR TO LEFT SIDE */
+section[data-testid="stSidebar"] {
+  display: block !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: auto !important;
+  top: 0 !important;
+  height: 100vh !important;
+  width: 21rem !important;
+  background: #f9fafb !important;
+  z-index: 999 !important;
+  transform: translateX(-100%) !important; /* Hidden by default */
+  transition: transform 0.3s ease !important;
+}
+
+/* Show sidebar when open */
+section[data-testid="stSidebar"][data-collapsed="false"] {
+  transform: translateX(0) !important;
+}
+
+/* HIDE DEFAULT STREAMLIT TOGGLE BUTTONS (both arrows) */
+button[kind="header"],
+button[data-testid="baseButton-header"],
+button[data-testid="collapsedControl"],
+[data-testid="collapsedControl"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* CUSTOM TOGGLE BUTTON - Top Left */
+.sidebar-toggle-btn {
+  position: fixed !important;
+  left: 1rem !important;
+  top: 1rem !important;
+  z-index: 1002 !important;
+  background: white !important;
+  border: 2px solid #6366f1 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 0.75rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer !important;
+  font-size: 1.2rem !important;
+  line-height: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #6366f1 !important;
+  color: white !important;
+  transform: scale(1.05) !important;
+}
+
+/* Adjust main content margin when sidebar is open */
+.main .block-container {
+  margin-left: 0 !important;
+  transition: margin-left 0.3s ease !important;
+}
+
+/* When sidebar is open, push content right */
+body[data-sidebar-open="true"] .main .block-container {
+  margin-left: 21rem !important;
+}
+
+/* Overlay when sidebar is open (mobile) */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+body[data-sidebar-open="true"] .sidebar-overlay {
+  display: block;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  section[data-testid="stSidebar"] {
+    width: 80vw !important;
+  }
+
+  body[data-sidebar-open="true"] .main .block-container {
+    margin-left: 0 !important;
+  }
+}

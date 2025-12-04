@@ -1,0 +1,184 @@
+/* Make scroll land nicely below header */
+#auth-section {
+  scroll-margin-top: 90px;
+}
+
+/* Style the next Streamlit form after our marker as a "card"
+   This works because marker and form are adjacent element containers. */
+div.element-container:has(#auth-form-marker)
+  + div.element-container
+  div[data-testid="stForm"] {
+  max-width: 720px !important;
+  margin: 0 auto 1.5rem auto !important;
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  padding: 1.6rem 1.8rem !important;
+  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Inputs inside that card */
+div.element-container:has(#auth-form-marker)
+  + div.element-container
+  div[data-testid="stForm"]
+  input {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+}
+
+/* Placeholder color */
+div.element-container:has(#auth-form-marker)
+  + div.element-container
+  div[data-testid="stForm"]
+  input::placeholder {
+  color: rgba(15, 23, 42, 0.45) !important;
+}
+
+/* Buttons in the auth area (kept tidy + readable) */
+div.element-container:has(#auth-form-marker)
+  + div.element-container
+  div[data-testid="stForm"]
+  .stButton
+  > button {
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+}
+
+/* On mobile, reduce padding */
+@media (max-width: 768px) {
+  div.element-container:has(#auth-form-marker)
+    + div.element-container
+    div[data-testid="stForm"] {
+    padding: 1.25rem 1.25rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HIDE ALL SIDEBAR TOGGLES ON LANDING PAGE
+   ═══════════════════════════════════════════════════════════ */
+
+/* actual sidebar + any toggle buttons */
+section[data-testid="stSidebar"],
+button[kind="header"],
+button[data-testid="baseButton-header"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* collapsed ">" chevron in top left (several possible testids) */
+div[data-testid="collapsedControl"],
+button[data-testid="collapsedControl"],
+div[data-testid="stSidebarCollapsedControl"],
+button[data-testid="stSidebarCollapsedControl"],
+button[aria-label="Toggle sidebar"],
+button[title="Toggle sidebar"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* ... existing HERO / MODAL / MENU styles ... 
+.hero-section {
+  position: relative !important;
+  width: 100% !important;
+  height: 50vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important; */
+
+/* background image + fallback color 
+  background-image: url("https://i.imgur.com/ss-logo.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 260px auto !important;
+
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+}*/
+
+/* Small floating close button in top-right of the overlay */
+.menu-close-btn .stButton > button {
+  position: fixed !important;
+  top: 1.5rem !important;
+  right: 1.5rem !important;
+  z-index: 10000 !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  color: !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.menu-close-btn .stButton > button:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-radius: 999px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+ MENU OVERLAY
+ ═══════════════════════════════════════════════════════════ */
+
+.menu-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.menu-panel {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 360px !important;
+  max-width: 90vw !important;
+  height: 100vh !important;
+  background: #ffffff;
+  z-index: 9999;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  overflow-y: auto;
+  margin: 0 !important;
+  animation: slideIn 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FLOATING CLOSE BUTTON FOR HAMBURGER MENU
+   Target the Streamlit button with key="close_menu"
+   ═══════════════════════════════════════════════════════════ */
+
+button[data-testid="baseButton-close_menu"] {
+  position: fixed !important;
+  top: 1.5rem !important;
+  right: 1.5rem !important;
+  z-index: 10001 !important;
+
+  /* override the global primary button styles */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  color: #111827 !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+}
+
+button[data-testid="baseButton-close_menu"]:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-radius: 999px !important;
+}
