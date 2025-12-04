@@ -1,119 +1,182 @@
-# SoulSync: An Agentic Emotional Intelligence Framework
+# 💠 SoulSync: An Agentic Emotional Intelligence Framework
 
 **One-liner:** A modular, multi-agent system for reflective, ethical, and personalized emotional support.  
-**Status:** Week 1 scaffold (MVP-ready foundation).
+**Status:** Week 2 — Context memory, emotional tagging, and journaling sidebar implemented.
 
 ---
 
 ## 🚀 Why SoulSync
-Most “AI therapist” projects are a single LLM behind a chat box. SoulSync is a **system**:
-- Multi‑agent orchestration (Listener → Cognitive → Mindfulness → Supervisor)
-- **Emotional Memory Graphs** tracked over time
-- **Reflection loops** (agents self‑evaluate & improve)
-- **Safety & Ethics** layer (transparent, non-clinical, escalation ready)
-- **Emotions-as-plugins** (anxiety, anger, motivation) for easy extension
+Most “AI therapist” projects are just a single LLM behind a chat box.  
+SoulSync is designed as a **system** — an evolving emotional-intelligence framework.
+
+- 🤝 **Multi-agent orchestration** — Listener → Cognitive → Mindfulness → Supervisor  
+- 🧠 **Emotional Memory Graphs** tracked over time  
+- 🔄 **Reflection loops** — agents self-evaluate & adapt  
+- 🛡 **Safety & Ethics layer** — transparent, non-clinical, escalation-ready  
+- 💎 **Emotions-as-plugins** — anxiety, anger, motivation → easily extendable modules  
 
 ---
 
-## 🧭 4‑Week Builder Roadmap
+## 🔹 Current Implementation (Week 2)
+
+SoulSync now runs as a local **Streamlit** web app that provides gentle, emotionally-aware conversation and tracks reflections privately on your device.
+
+### ✨ Features Live
+- 🧠 **Multi-Agent System:** Listener, Cognitive, Mindfulness, Supervisor  
+- 💬 **Contextual Memory:** last few conversation turns remembered  
+- 💗 **Emotional Tagger:** detects & logs themes (loneliness, shame, panic, anger etc.)  
+- 🧾 **Session Logging:** every turn stored locally in `data/sessions.jsonl`  
+- 🌿 **Safety Layer:** detects crisis phrases and adds non-clinical disclaimer  
+- 📖 **Sidebar Journal:** view recent reflections inside the UI  
+- 💾 **Local Only Memory:** data stays on your machine — never shared or used to train others  
+
+### 🖥 UI Preview
+💠 SoulSync — you're not alone here
+[ chat interface ]
+📖 Sidebar — shows recent reflections
+
+
+### 💬 Example Conversation
+> **User:** I don't have many friends; people just tolerate me.  
+> **SoulSync:**  
+> It sounds like you’ve been feeling left out and unwanted lately.  
+> That can really hurt — when you care deeply but worry others don’t feel the same. 💗  
+> It makes sense you’d wonder why people act that way; sometimes loneliness carries self-blame too.  
+> If it feels okay, we can talk about which part of that feels heaviest right now. 🤍  
+
+### ⚖️ Ethical Note
+SoulSync never claims to be a therapist.  
+It reflects, listens, and supports gently.  
+If crisis language is detected, a clear message encourages the user to reach out to real human help.
+
+### 🔒 Privacy by Design
+SoulSync is intentionally **local-first**.  
+All chats and emotional summaries are stored in `data/` on your device only.  
+No data is uploaded, shared, or used to train external models.  
+This ensures true emotional safety — your reflections stay yours.
+
+---
+
+## 🧭 4-Week Builder Roadmap
 
 ### Week 1 — MVP Agent Loop
-**Goal:** Single-user chat with 4 agents and Supervisor merge; session memory; safety checks.
-- [ ] Implement `ListenerAgent`, `CognitiveAgent`, `MindfulnessAgent`, `SupervisorAgent`
-- [ ] In-memory vector store stub + JSON session store
-- [ ] SafetyAgent for risk phrases; transparent disclaimer
-- [ ] Streamlit chat UI (local run)
-- [ ] Unit tests for agent contracts
-
-**Deliverable:** Local Streamlit app with an end‑to‑end turn.
+**Goal:** single-user chat with 4 agents and Supervisor merge; session memory; safety checks.
+- [x] Implement `ListenerAgent`, `CognitiveAgent`, `MindfulnessAgent`, `SupervisorAgent`
+- [x] In-memory JSON session store
+- [x] Safety Agent for risk phrases + disclaimer
+- [x] Streamlit chat UI (local run)
+- [x] Basic unit tests for agent contracts  
+**Deliverable:** Local Streamlit app with end-to-end conversation.
 
 ### Week 2 — Emotional Memory Graphs
-**Goal:** Persist states + visualize trends.
-- [ ] Sentiment/emotion extraction per message
-- [ ] Save to `data/metrics.jsonl`
-- [ ] Plot weekly trends (Plotly chart)
-- [ ] “Weekly Reflection Summary” auto-generation
-
-**Deliverable:** Trends chart + weekly summary button.
+**Goal:** Persist emotions + visualize trends.
+- [x] Emotion tagging per message  
+- [x] Save to `data/emotions.jsonl`  
+- [ ] Plot weekly trends (Plotly chart)  
+- [ ] Auto-generate “Weekly Reflection Summary”  
+**Deliverable:** Trend chart + summary button (coming soon).
 
 ### Week 3 — Reflection & Personalization
-**Goal:** Agents rate themselves post‑session and adapt prompts.
-- [ ] Reflection prompts & critic scores saved per agent
-- [ ] Prompt-weight tuning (e.g., empathy vs. structure)
-- [ ] User profile & preferences (tone, goals, topics)
-- [ ] Emotions-as-plugins (e.g., `anxiety_agent.py`)
-
-**Deliverable:** Noticeably improved responses over multiple sessions.
+**Goal:** Agents self-rate and adapt prompts.
+- [ ] Reflection prompts & critic scores per agent  
+- [ ] Prompt-weight tuning (e.g., empathy vs structure)  
+- [ ] User profile & preferences (tone, goals, topics)  
+- [ ] Emotions-as-plugins (e.g. `anxiety_agent.py`)  
+**Deliverable:** Improved responses over sessions.
 
 ### Week 4 — Polish & Deploy
-**Goal:** Make it portfolio-ready.
-- [ ] README architecture diagram + demo video link
-- [ ] Config via `.env` + provider switch (OpenAI/Anthropic/AWS Bedrock)
-- [ ] Basic telemetry (token usage, latency)
-- [ ] Deploy to Hugging Face Spaces or Render
-
+**Goal:** Portfolio-ready demo.
+- [ ] README diagram + video link  
+- [ ] Config via `.env` + provider switch (OpenAI/Anthropic/Bedrock)  
+- [ ] Basic telemetry (token usage, latency)  
+- [ ] Deploy to Hugging Face Spaces or Render  
 **Deliverable:** Public demo + clean repo.
 
 ---
 
 ## 🧩 Architecture (MVP)
 
-```
 User ──▶ ListenerAgent ──┐
-                         ├─▶ SupervisorAgent ──▶ Response
+├─▶ SupervisorAgent ──▶ Response
 CognitiveAgent ──────────┤
 MindfulnessAgent ────────┘
-            │
-     SafetyAgent (guard)
-            │
-   Memory (short/long)
-```
+│
+SafetyAgent (guard)
+│
+Memory (short/long)
 
-- **Agents**: small, single‑purpose modules exposing `plan()` and `respond()`.
-- **Supervisor**: merges and moderates outputs; ensures style/tone & ethics.
-- **Memory**: JSON + vector embeddings; Week 2 adds graphs & plots.
-- **Safety**: explicit non‑clinical disclaimer + keyword/risk detection.
+
+- **Agents:** small single-purpose modules exposing `respond()`  
+- **Supervisor:** merges and moderates outputs for style & safety  
+- **Memory:** JSON persistence; Week 2 adds emotion graphing  
+- **Safety:** keyword detection + explicit non-clinical disclaimer  
 
 ---
 
 ## ▶️ Quickstart
 
-```bash
-python -m venv .venv && source .venv/bin/activate  # on Windows: .venv\Scripts\activate
+``bash
+# create & activate env
+python -m venv .venv && source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
+pip install openai
+
+# run the Streamlit app
 streamlit run src/ui/streamlit_app.py
-```
 
-Create `.env` from `.env.example` and add your API keys if using cloud LLMs.
+
+- **Agents:** small single-purpose modules exposing `respond()`  
+- **Supervisor:** merges and moderates outputs for style & safety  
+- **Memory:** JSON persistence; Week 2 adds emotion graphing  
+- **Safety:** keyword detection + explicit non-clinical disclaimer  
 
 ---
 
-## 🧪 Tests
+## ▶️ Quickstart
 
-```bash
+``bash
+# create & activate env
+python -m venv .venv && source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
+pip install -r requirements.txt
+pip install openai
+
+# run the Streamlit app
+streamlit run src/ui/streamlit_app.py
+
+Create a .env file from .env.example and add your API key:
+PROVIDER=openai
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+
+🧪 Tests
 pytest -q
-```
 
----
+⚖️ Ethics & Disclaimer
 
-## ⚖️ Ethics & Disclaimer
+SoulSync is not a licensed therapist and does not provide medical advice.
+It supports reflection and well-being but cannot replace professional care.
+If you ever feel unsafe or in crisis, please contact a trusted person or local emergency services.
 
-SoulSync is **not** a licensed therapist and does not provide medical advice.  
-It supports reflection and wellness practices and can escalate to human resources when risk is detected.
-
----
-
-## 📂 Repo Layout
-
-```
+📂 Repo Layout
 src/
-  agents/ (listener, cognitive, mindfulness, supervisor, safety)
-  core/   (llm, memory, reflection, router)
-  emotions/ (plugins)
-  ui/     (streamlit app)
-prompts/  (system & reflection prompts)
-data/     (local persistence)
-tests/    (unit tests)
-```
+  agents/        (listener, cognitive, mindfulness, supervisor, safety)
+  core/          (llm, memory, router)
+  ui/            (streamlit app)
+  prompts/       (system and reflection prompts)
+  data/             (local logs and emotions)
+  tests/            (unit tests)
 
-MIT License.
+
+MIT License © 2025
+
+
+---
+
+✅ **What this gives you:**
+- A clear top-section for **recruiters/investors** (“Why SoulSync”)
+- A “Current Implementation” for **demo viewers**
+- A concrete roadmap for **technical credibility**
+- A short example chat that *feels real and human*
+- Clean quickstart instructions for anyone cloning the repo
+
+---
