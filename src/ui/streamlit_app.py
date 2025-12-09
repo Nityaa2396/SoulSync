@@ -220,43 +220,68 @@ load_css("styles.css")
     # MOBILE CSS FIXES
     # ═══════════════════════════════════════════════════════
 
+# ✅ STRONGER MOBILE CSS
 st.markdown("""
 <style>
-    /* Mobile-only fixes - doesn't affect desktop */
+    /* Force hide ALL sidebar elements on mobile */
     @media (max-width: 768px) {
-        /* Hide vertical sidebar text */
-        [data-testid="stSidebarNav"] {
-            display: none !important;
-        }
-        
-        section[data-testid="stSidebar"] > div:first-child {
-            display: none !important;
-        }
-        
-        /* Keep sidebar hidden by default */
+        /* Nuclear option - hide everything in sidebar initially */
         section[data-testid="stSidebar"] {
-            transform: translateX(-100%) !important;
+            display: none !important;
         }
         
+        /* Only show when explicitly opened */
         section[data-testid="stSidebar"][aria-expanded="true"] {
-            transform: translateX(0) !important;
+            display: block !important;
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            height: 100vh !important;
+            z-index: 999999 !important;
+            background: white !important;
         }
         
-        /* Ensure page starts at top */
+        /* Hide sidebar toggle text */
+        button[kind="header"] p {
+            display: none !important;
+        }
+        
+        /* Force scroll to top */
+        .main .block-container {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        /* Buttons must be touch-friendly */
+        button, .stButton button {
+            min-height: 48px !important;
+            font-size: 16px !important;
+            padding: 0.75rem 1rem !important;
+        }
+        
+        /* Remove any top padding/margin */
         section.main {
             padding-top: 0 !important;
         }
         
-        .block-container {
-            padding-top: 1rem !important;
-        }
-        
-        /* Touch-friendly buttons */
-        button {
-            min-height: 48px !important;
+        .element-container {
+            margin-top: 0 !important;
         }
     }
+    
+    /* Force immediate scroll on page load */
+    html, body {
+        scroll-behavior: auto !important;
+    }
 </style>
+
+<script>
+    // Force scroll to top immediately
+    if (window.parent.document.querySelector('section.main')) {
+        window.parent.document.querySelector('section.main').scrollTop = 0;
+    }
+</script>
 """, unsafe_allow_html=True)
 
 
