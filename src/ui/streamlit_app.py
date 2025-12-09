@@ -216,74 +216,25 @@ st.set_page_config(
 
 load_css("styles.css")
 
-    # ═══════════════════════════════════════════════════════
-    # MOBILE CSS FIXES
-    # ═══════════════════════════════════════════════════════
 
-# ✅ STRONGER MOBILE CSS
+   # ✅ SAFE MOBILE CSS - WON'T BREAK APP
+
 st.markdown("""
 <style>
-    /* Force hide ALL sidebar elements on mobile */
+    /* Mobile fixes - safe version */
     @media (max-width: 768px) {
-        /* Nuclear option - hide everything in sidebar initially */
-        section[data-testid="stSidebar"] {
-            display: none !important;
+        /* Hide sidebar nav text */
+        [data-testid="stSidebarNav"] {
+            display: none;
         }
         
-        /* Only show when explicitly opened */
-        section[data-testid="stSidebar"][aria-expanded="true"] {
-            display: block !important;
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            height: 100vh !important;
-            z-index: 999999 !important;
-            background: white !important;
+        /* Make buttons touch-friendly */
+        button {
+            min-height: 44px;
         }
-        
-        /* Hide sidebar toggle text */
-        button[kind="header"] p {
-            display: none !important;
-        }
-        
-        /* Force scroll to top */
-        .main .block-container {
-            padding-top: 0 !important;
-            margin-top: 0 !important;
-        }
-        
-        /* Buttons must be touch-friendly */
-        button, .stButton button {
-            min-height: 48px !important;
-            font-size: 16px !important;
-            padding: 0.75rem 1rem !important;
-        }
-        
-        /* Remove any top padding/margin */
-        section.main {
-            padding-top: 0 !important;
-        }
-        
-        .element-container {
-            margin-top: 0 !important;
-        }
-    }
-    
-    /* Force immediate scroll on page load */
-    html, body {
-        scroll-behavior: auto !important;
     }
 </style>
-
-<script>
-    // Force scroll to top immediately
-    if (window.parent.document.querySelector('section.main')) {
-        window.parent.document.querySelector('section.main').scrollTop = 0;
-    }
-</script>
 """, unsafe_allow_html=True)
-
 
 # ══════════════════════════════════════════════════════════════
 # ROOM CONFIGS
@@ -624,6 +575,23 @@ if not st.session_state.get("authenticated", False):
 
     st.info("💡 **Not a replacement for licensed therapy.** If you're in crisis, contact emergency services or call 988.")
     st.stop()
+
+# ══════════════════════════════════════════════════════════════
+# AUTHENTICATED USERS - SCROLL TO TOP FIX
+# ══════════════════════════════════════════════════════════════
+
+if st.session_state.get("scroll_to_top", False):
+    st.markdown("""
+    <script>
+        setTimeout(function() {
+            window.scrollTo(0, 0);
+            if (window.parent && window.parent.document) {
+                window.parent.document.querySelector('section.main').scrollTop = 0;
+            }
+        }, 100);
+    </script>
+    """, unsafe_allow_html=True)
+    st.session_state.scroll_to_top = False
 
 
 # ══════════════════════════════════════════════════════════════
