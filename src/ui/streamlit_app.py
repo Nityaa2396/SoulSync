@@ -216,6 +216,49 @@ st.set_page_config(
 
 load_css("styles.css")
 
+    # ═══════════════════════════════════════════════════════
+    # MOBILE CSS FIXES
+    # ═══════════════════════════════════════════════════════
+
+st.markdown("""
+<style>
+    /* Mobile-only fixes - doesn't affect desktop */
+    @media (max-width: 768px) {
+        /* Hide vertical sidebar text */
+        [data-testid="stSidebarNav"] {
+            display: none !important;
+        }
+        
+        section[data-testid="stSidebar"] > div:first-child {
+            display: none !important;
+        }
+        
+        /* Keep sidebar hidden by default */
+        section[data-testid="stSidebar"] {
+            transform: translateX(-100%) !important;
+        }
+        
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            transform: translateX(0) !important;
+        }
+        
+        /* Ensure page starts at top */
+        section.main {
+            padding-top: 0 !important;
+        }
+        
+        .block-container {
+            padding-top: 1rem !important;
+        }
+        
+        /* Touch-friendly buttons */
+        button {
+            min-height: 48px !important;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 # ══════════════════════════════════════════════════════════════
 # ROOM CONFIGS
@@ -375,6 +418,7 @@ for key, default in [
     ("scroll_nonce", 0),
     ("authenticated", False),
     ("show_dashboard", False),
+    ("scroll_to_top", False)
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -387,6 +431,18 @@ for key, default in [
 if not st.session_state.get("authenticated", False):
     load_css("landing.css")
     inject_hero_logo_css()
+
+    if st.session_state.get("scroll_to_top", False):
+        st.markdown("""
+        <script>
+            window.parent.document.querySelector('section.main').scrollTo({
+                top: 0,
+                behavior: 'instant'
+            });
+        </script>
+        """, unsafe_allow_html=True)
+        st.session_state.scroll_to_top = False
+
 
     # Header
     col1, col2, col3 = st.columns([3, 6, 3])
@@ -471,6 +527,7 @@ if not st.session_state.get("authenticated", False):
                                 st.session_state.authenticated = True
                                 st.session_state.show_login_form = False
                                 st.session_state.show_signup_form = False
+                                st.session_state.scroll_to_top = True
                                 st.rerun()
                             else:
                                 st.error("❌ " + message)
@@ -514,6 +571,7 @@ if not st.session_state.get("authenticated", False):
                                     time.sleep(1)
                                     st.session_state.show_signup_form = False
                                     st.session_state.show_login_form = True
+                                    st.session_state.scroll_to_top = True
                                     st.session_state.scroll_target = "auth-section"
                                     st.session_state.scroll_nonce += 1
                                     st.rerun()
@@ -641,11 +699,7 @@ with st.sidebar:
     st.markdown(f"**{current_room['icon']} {current_room['title']}**")
     st.caption(current_room['description'])
 
-    if st.button("📊 Emotional Journey", key="view_dashboard_btn", use_container_width=True):
-        st.session_state.show_dashboard = True
-        st.rerun()
     
-    st.divider()  # ✅ Add a divider after the button
     
     if st.button("🔄 Change Room", use_container_width=True):
         st.session_state.room_selected = False
