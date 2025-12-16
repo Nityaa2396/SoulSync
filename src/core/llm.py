@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from openai import OpenAI
-
 @dataclass
 class Message:
     role: str
@@ -18,29 +16,46 @@ class LLMClient:
     Thin wrapper with provider switch.
     Supports OpenAI and Anthropic (Claude).
     Now includes streaming support for real-time responses.
+    
+    ✅ FIXED: Defaults to Anthropic, removes OpenAI import if not needed
     """
     def __init__(self):
-        self.provider = os.getenv("PROVIDER", "openai")
+        # ✅ FIX 1: Default to anthropic (not openai)
+        self.provider = os.getenv("PROVIDER", "anthropic").lower()
+        
         self.openai_model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         self.anthropic_model = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
         self._openai_client = None
         self._anthropic_client = None
 
         if self.provider == "openai":
+            # ✅ FIX 2: Only import OpenAI if actually using it
+            try:
+                from openai import OpenAI
+            except ImportError:
+                raise RuntimeError("Install openai: pip install openai")
+            
             api_key = os.getenv("OPENAI_API_KEY")
             if not api_key:
-                raise RuntimeError("Missing OPENAI_API_KEY in .env")
+                raise RuntimeError("Missing OPENAI_API_KEY in .env or Streamlit secrets")
             self._openai_client = OpenAI(api_key=api_key)
         
         elif self.provider == "anthropic":
+            # ✅ FIX 3: Better error message for missing Anthropic key
             api_key = os.getenv("ANTHROPIC_API_KEY")
             if not api_key:
-                raise RuntimeError("Missing ANTHROPIC_API_KEY in .env")
+                raise RuntimeError(
+                    "Missing ANTHROPIC_API_KEY in .env or Streamlit secrets. "
+                    "Add it to Settings → Secrets in Streamlit Cloud."
+                )
             try:
                 import anthropic
                 self._anthropic_client = anthropic.Anthropic(api_key=api_key)
             except ImportError:
                 raise RuntimeError("Install anthropic: pip install anthropic")
+        
+        else:
+            raise ValueError(f"Unknown PROVIDER '{self.provider}'. Use 'openai' or 'anthropic'")
 
     def chat(self, messages: List[Message], system: Optional[str] = None) -> str:
         """
@@ -53,6 +68,8 @@ class LLMClient:
         
         # === OPENAI ===
         if self.provider == "openai":
+            from openai import OpenAI  # Import only when needed
+            
             openai_messages: List[Dict[str, str]] = []
             if system:
                 openai_messages.append({"role": "system", "content": system})
@@ -116,6 +133,8 @@ class LLMClient:
         
         # === OPENAI STREAMING ===
         if self.provider == "openai":
+            from openai import OpenAI  # Import only when needed
+            
             openai_messages: List[Dict[str, str]] = []
             if system:
                 openai_messages.append({"role": "system", "content": system})
