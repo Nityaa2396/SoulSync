@@ -29,7 +29,7 @@ class LLMClient:
         self._anthropic_client = None
 
         if self.provider == "openai":
-            # ✅ FIX 2: Only import OpenAI if actually using it
+            # Only import OpenAI if actually using it
             try:
                 from openai import OpenAI
             except ImportError:
@@ -41,7 +41,7 @@ class LLMClient:
             self._openai_client = OpenAI(api_key=api_key)
         
         elif self.provider == "anthropic":
-            # ✅ FIX 3: Better error message for missing Anthropic key
+            # Better error message for missing Anthropic key
             api_key = os.getenv("ANTHROPIC_API_KEY")
             if not api_key:
                 raise RuntimeError(
