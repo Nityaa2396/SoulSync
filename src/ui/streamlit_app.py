@@ -21,6 +21,18 @@ from src.agents.emotion_tagger import EmotionTaggerAgent
 from src.agents.memory_helper import MemoryHelper
 from components.emotion_charts import render_emotion_dashboard
 
+# ===== DEBUG - REMOVE AFTER TESTING =====
+st.write("🔍 **DEBUG INFO:**")
+try:
+    st.write(f"Model from secrets: `{st.secrets['ANTHROPIC_MODEL']}`")
+except Exception as e:
+    st.write(f"❌ Secrets error: {e}")
+
+st.write(f"Model from env: `{os.getenv('ANTHROPIC_MODEL', 'NOT SET')}`")
+st.write(f"API key exists in secrets: `{bool('ANTHROPIC_API_KEY' in st.secrets)}`")
+st.write("=" * 50)
+# ===== END DEBUG =====
+
 try:
     from src.agents.specialists.family_conflict_agent import FamilyConflictAgent
     FAMILY_AGENT_AVAILABLE = True
@@ -867,3 +879,6 @@ if user_text:
     )
     
     st.rerun()
+
+st.write("🔍 Debug - Model:", st.secrets.get("ANTHROPIC_MODEL", "NOT FOUND IN SECRETS"))
+st.stop() 

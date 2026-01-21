@@ -6,13 +6,22 @@ from dotenv import load_dotenv
 import anthropic
 
 load_dotenv()
+
 def get_secret(key: str, default: str = None) -> Optional[str]:
     """Get secret from Streamlit Cloud or fall back to env vars."""
     try:
         import streamlit as st
-        return st.secrets.get(key) or os.getenv(key, default)
-    except Exception:
-        return os.getenv(key, default)
+        # Try accessing secrets directly (not .get())
+        if key in st.secrets:
+            value = st.secrets[key]
+            st.write(f"✅ Found {key} in st.secrets")  # Debug
+            return value
+    except Exception as e:
+        st.write(f"⚠️ st.secrets error: {e}")  # Debug
+    
+    env_value = os.getenv(key, default)
+    st.write(f"📁 Using env/default for {key}: {env_value}")  # Debug
+    return env_value
 
 @dataclass
 class Message:
