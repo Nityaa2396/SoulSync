@@ -21,17 +21,6 @@ from src.agents.emotion_tagger import EmotionTaggerAgent
 from src.agents.memory_helper import MemoryHelper
 from components.emotion_charts import render_emotion_dashboard
 
-# ===== DEBUG - REMOVE AFTER TESTING =====
-st.write("🔍 **DEBUG INFO:**")
-try:
-    st.write(f"Model from secrets: `{st.secrets['ANTHROPIC_MODEL']}`")
-except Exception as e:
-    st.write(f"❌ Secrets error: {e}")
-
-st.write(f"Model from env: `{os.getenv('ANTHROPIC_MODEL', 'NOT SET')}`")
-st.write(f"API key exists in secrets: `{bool('ANTHROPIC_API_KEY' in st.secrets)}`")
-st.write("=" * 50)
-# ===== END DEBUG =====
 
 try:
     from src.agents.specialists.family_conflict_agent import FamilyConflictAgent
@@ -607,41 +596,57 @@ if st.session_state.get("scroll_to_top", False):
 
 
 # ══════════════════════════════════════════════════════════════
-# AUTHENTICATED - STYLE NATIVE SIDEBAR BUTTON
+# AUTHENTICATED - SIDEBAR STYLING
 # ══════════════════════════════════════════════════════════════
 
-# ✅ Use Streamlit's NATIVE sidebar toggle (no custom JavaScript)
 st.markdown("""
 <style>
-    /* Position Streamlit's built-in toggle button on LEFT */
-    button[kind="header"] {
+    /* Hide sidebar by default until user clicks arrow */
+    section[data-testid="stSidebar"] {
+        background: #f9fafb !important;
+        min-width: 0px !important;
+    }
+    
+    /* Style the collapse/expand button */
+    [data-testid="collapsedControl"] {
         position: fixed !important;
-        left: 1rem !important;
-        top: 1rem !important;
-        z-index: 1001 !important;
+        left: 10px !important;
+        top: 10px !important;
+        z-index: 999999 !important;
         background: white !important;
         border: 2px solid #76b2bf !important;
         border-radius: 8px !important;
-        padding: 0.5rem !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        padding: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        color: #76b2bf !important;
     }
     
-    button[kind="header"]:hover {
+    [data-testid="collapsedControl"]:hover {
         background: #76b2bf !important;
         color: white !important;
     }
     
-    /* Hide the "Toggle sidebar" text, show only icon */
-    button[kind="header"] p {
-        display: none !important;
+    /* Make sure sidebar content doesn't show when collapsed */
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        min-width: 0px !important;
+        width: 0px !important;
+        overflow: hidden !important;
     }
     
-    /* Style the sidebar */
-    section[data-testid="stSidebar"] {
-        background: #f9fafb !important;
+    /* When sidebar IS open, give it proper width */
+    section[data-testid="stSidebar"][aria-expanded="true"] {
+        min-width: 280px !important;
+        width: 280px !important;
+    }
+    
+    /* Hide the weird vertical text when collapsed */
+    section[data-testid="stSidebar"][aria-expanded="false"] > div {
+        visibility: hidden !important;
     }
 </style>
 """, unsafe_allow_html=True)
+    
+
 
 
 # ══════════════════════════════════════════════════════════════
@@ -880,5 +885,5 @@ if user_text:
     
     st.rerun()
 
-st.write("🔍 Debug - Model:", st.secrets.get("ANTHROPIC_MODEL", "NOT FOUND IN SECRETS"))
+
 st.stop() 
