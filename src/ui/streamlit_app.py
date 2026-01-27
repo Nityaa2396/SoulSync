@@ -212,7 +212,7 @@ st.set_page_config(
     page_title="SoulSync",
     page_icon="💠",
     layout="wide",
-    initial_sidebar_state="collapsed"  # ✅ Start sidebar CLOSED
+    initial_sidebar_state="auto"  # ✅ Start sidebar CLOSED
 )
 
 load_css("styles.css")
@@ -233,6 +233,24 @@ st.markdown("""
         button {
             min-height: 44px;
         }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+    /* Ensure sidebar toggle is always visible */
+    button[kind="header"],
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapseButton"] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Style the sidebar */
+    section[data-testid="stSidebar"] {
+        background: #f9fafb !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -596,55 +614,53 @@ if st.session_state.get("scroll_to_top", False):
 
 
 # ══════════════════════════════════════════════════════════════
-# AUTHENTICATED - SIDEBAR STYLING
+# AUTHENTICATED - SIDEBAR TOGGLE BUTTON
 # ══════════════════════════════════════════════════════════════
 
 st.markdown("""
 <style>
-    /* Hide sidebar by default until user clicks arrow */
-    section[data-testid="stSidebar"] {
-        background: #f9fafb !important;
-        min-width: 0px !important;
-    }
-    
-    /* Style the collapse/expand button */
+    /* Make the native Streamlit sidebar toggle visible */
     [data-testid="collapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
         position: fixed !important;
-        left: 10px !important;
-        top: 10px !important;
+        left: 15px !important;
+        top: 15px !important;
         z-index: 999999 !important;
         background: white !important;
         border: 2px solid #76b2bf !important;
         border-radius: 8px !important;
-        padding: 8px !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-        color: #76b2bf !important;
+        padding: 8px 12px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+        cursor: pointer !important;
     }
     
     [data-testid="collapsedControl"]:hover {
         background: #76b2bf !important;
+    }
+    
+    [data-testid="collapsedControl"]:hover svg {
         color: white !important;
+        stroke: white !important;
     }
     
-    /* Make sure sidebar content doesn't show when collapsed */
-    section[data-testid="stSidebar"][aria-expanded="false"] {
-        min-width: 0px !important;
-        width: 0px !important;
-        overflow: hidden !important;
+    /* Style sidebar when open */
+    section[data-testid="stSidebar"] {
+        background: #f9fafb !important;
     }
     
-    /* When sidebar IS open, give it proper width */
-    section[data-testid="stSidebar"][aria-expanded="true"] {
-        min-width: 280px !important;
-        width: 280px !important;
-    }
-    
-    /* Hide the weird vertical text when collapsed */
-    section[data-testid="stSidebar"][aria-expanded="false"] > div {
-        visibility: hidden !important;
+    section[data-testid="stSidebar"] > div:first-child {
+        background: #f9fafb !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
+# Add a custom toggle button as fallback
+col1, col2, col3 = st.columns([1, 10, 1])
+with col1:
+    if st.button("☰", key="menu_toggle", help="Open menu"):
+        st.session_state.sidebar_open = True
+        st.rerun()
     
 
 
