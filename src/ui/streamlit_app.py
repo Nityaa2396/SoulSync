@@ -212,7 +212,7 @@ st.set_page_config(
     page_title="SoulSync",
     page_icon="💠",
     layout="wide",
-    initial_sidebar_state="auto"  # ✅ Start sidebar CLOSED
+    initial_sidebar_state="collapsed"  # ✅ Start sidebar CLOSED
 )
 
 load_css("styles.css")
@@ -237,23 +237,44 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ══════════════════════════════════════════════════════════════
+# SIDEBAR STYLING - HIDE WHEN COLLAPSED
+# ══════════════════════════════════════════════════════════════
+
 st.markdown("""
 <style>
-    /* Ensure sidebar toggle is always visible */
-    button[kind="header"],
-    [data-testid="collapsedControl"],
-    [data-testid="stSidebarCollapseButton"] {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+    /* Hide sidebar content completely when collapsed */
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        display: none !important;
     }
     
-    /* Style the sidebar */
-    section[data-testid="stSidebar"] {
+    /* Style sidebar when open */
+    section[data-testid="stSidebar"][aria-expanded="true"] {
         background: #f9fafb !important;
+        min-width: 280px !important;
+    }
+    
+    /* Make the toggle arrow visible and styled */
+    [data-testid="collapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
+        position: fixed !important;
+        left: 10px !important;
+        top: 10px !important;
+        z-index: 999999 !important;
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 6px !important;
+        padding: 8px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    
+    [data-testid="collapsedControl"]:hover {
+        background: #f3f4f6 !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ══════════════════════════════════════════════════════════════
 # ROOM CONFIGS
@@ -613,57 +634,47 @@ if st.session_state.get("scroll_to_top", False):
     st.session_state.scroll_to_top = False
 
 
-# ══════════════════════════════════════════════════════════════
-# AUTHENTICATED - SIDEBAR TOGGLE BUTTON
-# ══════════════════════════════════════════════════════════════
+# # ══════════════════════════════════════════════════════════════
+# # AUTHENTICATED - SIDEBAR TOGGLE BUTTON
+# # ══════════════════════════════════════════════════════════════
 
-st.markdown("""
-<style>
-    /* Make the native Streamlit sidebar toggle visible */
-    [data-testid="collapsedControl"] {
-        display: block !important;
-        visibility: visible !important;
-        position: fixed !important;
-        left: 15px !important;
-        top: 15px !important;
-        z-index: 999999 !important;
-        background: white !important;
-        border: 2px solid #76b2bf !important;
-        border-radius: 8px !important;
-        padding: 8px 12px !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
-        cursor: pointer !important;
-    }
+# st.markdown("""
+# <style>
+#     /* Make the native Streamlit sidebar toggle visible */
+#     [data-testid="collapsedControl"] {
+#         display: block !important;
+#         visibility: visible !important;
+#         position: fixed !important;
+#         left: 15px !important;
+#         top: 15px !important;
+#         z-index: 999999 !important;
+#         background: white !important;
+#         border: 2px solid #76b2bf !important;
+#         border-radius: 8px !important;
+#         padding: 8px 12px !important;
+#         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+#         cursor: pointer !important;
+#     }
     
-    [data-testid="collapsedControl"]:hover {
-        background: #76b2bf !important;
-    }
+#     [data-testid="collapsedControl"]:hover {
+#         background: #76b2bf !important;
+#     }
     
-    [data-testid="collapsedControl"]:hover svg {
-        color: white !important;
-        stroke: white !important;
-    }
+#     [data-testid="collapsedControl"]:hover svg {
+#         color: white !important;
+#         stroke: white !important;
+#     }
     
-    /* Style sidebar when open */
-    section[data-testid="stSidebar"] {
-        background: #f9fafb !important;
-    }
+#     /* Style sidebar when open */
+#     section[data-testid="stSidebar"] {
+#         background: #f9fafb !important;
+#     }
     
-    section[data-testid="stSidebar"] > div:first-child {
-        background: #f9fafb !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Add a custom toggle button as fallback
-col1, col2, col3 = st.columns([1, 10, 1])
-with col1:
-    if st.button("☰", key="menu_toggle", help="Open menu"):
-        st.session_state.sidebar_open = True
-        st.rerun()
-    
-
-
+#     section[data-testid="stSidebar"] > div:first-child {
+#         background: #f9fafb !important;
+#     }
+# </style>
+# """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════
 # ROOM SELECTION
